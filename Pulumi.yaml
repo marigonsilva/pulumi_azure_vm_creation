@@ -1,0 +1,48 @@
+name: quickstart
+runtime: yaml
+description: A minimal Azure Native Pulumi YAML program
+
+variables:
+  vnetId:
+    Fn::Invoke:
+    Function: azure:network:getVirtualNetwork
+    Arguments:
+      name: alpha-vnet
+      resourceGroupName: GEO_Networks
+resources:
+  resourceGroup:
+    type: azure-native:resources:ResourceGroup
+    properties:
+      resourceGroupName: pulumi_dev
+      location: Eastus2
+  networkInterface:
+    type: azure:network:NetworkInterface
+    properties:
+      location: ${resourceGroup.location}
+      resourceGroupName: "${resourceGroup.name}"
+      ipConfigurations:
+        - name: az-dev-pulumi-01
+          subnetId: /subscriptions/a8ab3692-5b4d-4517-bec1-e47c3b595c3c/resourceGroups/GEO_Networks/providers/Microsoft.Network/virtualNetworks/alpha-vnet/subnets/Management-Alpha
+          privateIpAddressAllocation: Dynamic
+  vm:
+    type: azure:compute:LinuxVirtualMachine
+    properties:
+      name: az-dev-pulumi-01
+      computerName: az-dev-pulumi-01
+      adminUsername: pulumi
+      adminPassword: neogrid@12345
+      disablePasswordAuthentication: false
+      location: "Eastus2"
+      resourceGroupName: ${resourceGroup.name}
+      networkInterfaceIds: ["${networkInterface.id}"]
+      size: Standard_F4s_v2
+      osDisk:
+          caching: "ReadWrite"
+          storageAccountType: "Standard_LRS"
+      sourceImageReference:
+          publisher: "Canonical"
+          offer: "UbuntuServer"
+          version: "latest"
+          sku: "18.04-LTS"
+outputs:
+    interfaces: ${vm.networkInterfaceIds}
