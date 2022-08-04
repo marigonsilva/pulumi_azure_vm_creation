@@ -30,7 +30,7 @@ resources:
       name: az-dev-pulumi-01
       computerName: az-dev-pulumi-01
       adminUsername: pulumi
-      adminPassword: neogrid@12345
+      adminPassword: pulumi@12345
       disablePasswordAuthentication: false
       location: "Eastus2"
       resourceGroupName: ${resourceGroup.name}
