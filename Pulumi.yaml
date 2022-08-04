@@ -22,7 +22,7 @@ resources:
       resourceGroupName: "${resourceGroup.name}"
       ipConfigurations:
         - name: az-dev-pulumi-01
-          subnetId: /subscriptions/a8ab3692-5b4d-4517-bec1-e47c3b595c3c/resourceGroups/GEO_Networks/providers/Microsoft.Network/virtualNetworks/alpha-vnet/subnets/Management-Alpha
+          subnetId: "caminho do resource da azure"
           privateIpAddressAllocation: Dynamic
   vm:
     type: azure:compute:LinuxVirtualMachine
